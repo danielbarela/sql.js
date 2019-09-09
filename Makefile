@@ -10,14 +10,14 @@ SQLITE_AMALGAMATION = sqlite-amalgamation-3280000
 SQLITE_AMALGAMATION_ZIP_URL = https://www.sqlite.org/2019/sqlite-amalgamation-3280000.zip
 SQLITE_AMALGAMATION_ZIP_SHA1 = eb82fcc95104c8e2d9550ab023c1054b9cc40a76
 
-# Note that extension-functions.c hasn't been updated since 2010-02-06, so likely doesn't need to be updated 
+# Note that extension-functions.c hasn't been updated since 2010-02-06, so likely doesn't need to be updated
 EXTENSION_FUNCTIONS = extension-functions.c
 EXTENSION_FUNCTIONS_URL = https://www.sqlite.org/contrib/download/extension-functions.c?get=25
 EXTENSION_FUNCTIONS_SHA1 = c68fa706d6d9ff98608044c00212473f9c14892f
 
 EMCC=emcc
 
-CFLAGS=-O2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DLONGDOUBLE_TYPE=double -DSQLITE_THREADSAFE=0 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS
+CFLAGS=-O2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DLONGDOUBLE_TYPE=double -DSQLITE_THREADSAFE=0 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_RTREE=1
 
 # When compiling to WASM, enabling memory-growth is not expected to make much of an impact, so we enable it for all builds
 # Since tihs is a library and not a standalone executable, we don't want to catch unhandled Node process exceptions
@@ -32,7 +32,7 @@ EMFLAGS = \
 
 EMFLAGS_WASM = \
 	-s WASM=1 \
-	-s ALLOW_MEMORY_GROWTH=1 
+	-s ALLOW_MEMORY_GROWTH=1
 
 EMFLAGS_OPTIMIZED= \
 	-s INLINING_LIMIT=50 \
@@ -66,19 +66,19 @@ dist/sql-wasm-debug.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/
 .PHONY: optimized
 optimized: dist/sql-asm.js dist/sql-wasm.js dist/sql-asm-memory-growth.js
 
-dist/sql-asm.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json 
+dist/sql-asm.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json
 	$(EMCC) $(EMFLAGS) $(EMFLAGS_OPTIMIZED) -s WASM=0 $(BITCODE_FILES) --pre-js out/api.js -o $@
 	mv $@ out/tmp-raw.js
 	cat src/shell-pre.js out/tmp-raw.js src/shell-post.js > $@
 	rm out/tmp-raw.js
 
-dist/sql-wasm.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json 
+dist/sql-wasm.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json
 	$(EMCC) $(EMFLAGS) $(EMFLAGS_OPTIMIZED) $(EMFLAGS_WASM) $(BITCODE_FILES) --pre-js out/api.js -o $@
 	mv $@ out/tmp-raw.js
 	cat src/shell-pre.js out/tmp-raw.js src/shell-post.js > $@
 	rm out/tmp-raw.js
 
-dist/sql-asm-memory-growth.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json 
+dist/sql-asm-memory-growth.js: $(BITCODE_FILES) $(OUTPUT_WRAPPER_FILES) out/api.js src/exported_functions.json src/exported_runtime_methods.json
 	$(EMCC) $(EMFLAGS) $(EMFLAGS_OPTIMIZED) -s WASM=0 -s ALLOW_MEMORY_GROWTH=1 $(BITCODE_FILES) --pre-js out/api.js -o $@
 	mv $@ out/tmp-raw.js
 	cat src/shell-pre.js out/tmp-raw.js src/shell-post.js > $@
@@ -176,12 +176,11 @@ sqlite-src/$(SQLITE_AMALGAMATION)/$(EXTENSION_FUNCTIONS): cache/$(EXTENSION_FUNC
 	cp 'cache/$(EXTENSION_FUNCTIONS)' $@
 
 
-.PHONY: clean 
-clean: 
-	rm -rf out/* dist/*	
+.PHONY: clean
+clean:
+	rm -rf out/* dist/*
 
 .PHONY: clean-all
-clean-all: 
+clean-all:
 	rm -f out/* dist/* cache/*
 	rm -rf sqlite-src/
-
