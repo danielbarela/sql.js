@@ -1,3 +1,9 @@
+# SQLite with RTree
+
+This repository exactly mirrors https://github.com/kripken/sql.js/actions except for the following:
+* addition of -DSQLITE_ENABLE_RTREE=1 in the Makefile
+* publishes to npmjs under the rtree-sql.js package name
+
 # SQLite compiled to JavaScript
 [![CI status](https://github.com/kripken/sql.js/workflows/CI/badge.svg)](https://github.com/kripken/sql.js/actions)
 [![CDNJS version](https://img.shields.io/cdnjs/v/sql.js.svg)](https://cdnjs.com/libraries/sql.js)
