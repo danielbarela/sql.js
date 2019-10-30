@@ -1,5 +1,5 @@
 {
-	"name": "sql.js",
+	"name": "rtree-sql.js",
 	"version": "1.0.0",
 	"description": "SQLite library with support for opening and writing databases, prepared statements, and more. This SQLite library is in pure javascript (compiled with emscripten).",
 	"keywords": [
@@ -14,7 +14,8 @@
 		"statement",
 		"emscripten",
 		"asm",
-		"asm.js"
+		"asm.js",
+		"rtree"
 	],
 	"license": "MIT",
 	"main": "./dist/sql-wasm.js",
@@ -28,13 +29,13 @@
 		"test-wasm": "node test/all.js wasm",
 		"test-wasm-debug": "node test/all.js wasm-debug"
 	},
-	"homepage": "http://github.com/kripken/sql.js",
+	"homepage": "http://github.com/danielbarela/sql.js",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/kripken/sql.js.git"
+		"url": "http://github.com/danielbarela/sql.js.git"
 	},
 	"bugs": {
-		"url": "https://github.com/kripken/sql.js/issues"
+		"url": "https://github.com/danielbarela/sql.js/issues"
 	},
 	"devDependencies": {
 		"coffeescript": "^1.12.7",
