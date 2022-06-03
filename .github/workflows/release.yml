@@ -14,16 +14,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: make
         uses: ./.github/actions/build-sqljs
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
       - run: cd dist && zip sqljs-wasm.zip sql-wasm.{js,wasm}
       - name: Upload Release Asset (wasm)
         uses: lovasoa/upload-release-asset@851d9cc59fe8113912edffbd8fddaa09470a5ac0
