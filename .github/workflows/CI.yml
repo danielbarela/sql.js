@@ -6,22 +6,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: mymindstorm/setup-emsdk@v1
-      with:
-        version: '1.38.47'
-    - name: install coffee
-      run: npm install --global coffeescript@1
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~/.emscripten_cache
-        key: emscripten-1.38.47
+    - uses: actions/checkout@v2
     - name: make
-      run: make
+      uses: ./.github/actions/build-sqljs
+    - uses: actions/upload-artifact@v2
+      with: {name: dist, path: dist}
     - name: test
       run: npm ci && npm test
-    - uses: actions/upload-artifact@master
+    - name: generate documentation
+      run: npm run doc
+    - name: Update github pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      uses: JamesIves/github-pages-deploy-action@3.6.2
       with:
-        name: dist
-        path: dist
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages # The branch the action should deploy to.
+        FOLDER: "." # The folder the action should deploy.
+        CLEAN: false # Automatically remove deleted files from the deploy branch

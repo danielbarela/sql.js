@@ -2,6 +2,6 @@
 "cwrap",
 "stackAlloc",
 "stackSave",
-"stackRestore"
+"stackRestore",
+"UTF8ToString"
 ]
-
